@@ -24,10 +24,10 @@ ThemeData lightTheme(BuildContext context) {
 
 ThemeData darkTheme(BuildContext context) {
   return FlexThemeData.dark(
-    scheme: FlexScheme.redWine,
+    scheme: FlexScheme.cyanM3,
     textTheme: GoogleFonts.quicksandTextTheme(),
     surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
-    blendLevel: 13,
+    blendLevel: 20,
     subThemesData: const FlexSubThemesData(
       blendOnLevel: 20,
       useTextTheme: true,

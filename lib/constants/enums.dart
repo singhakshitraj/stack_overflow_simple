@@ -4,3 +4,9 @@ enum LoadingState {
   error,
   notInitiated,
 }
+
+enum StateOfList{
+  adding,
+  done,
+  loading,
+}

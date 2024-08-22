@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:social_media/bloc/login_bloc/login_bloc.dart';
 import 'package:social_media/bloc/login_bloc/login_event.dart';
 import 'package:social_media/bloc/login_bloc/login_state.dart';
@@ -100,9 +101,8 @@ class _SignUpPageState extends State<LoginPage> {
                               alignment: Alignment.bottomRight,
                               child: GestureDetector(
                                   onTap: () {
-                                    Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (context) =>
-                                            const SignUpPage()));
+                                    Navigator.of(context).push(
+                                            PageTransition(type: PageTransitionType.rightToLeft,child:  const SignUpPage()));
                                   },
                                   child: const Text(
                                     'New User? Register Here',

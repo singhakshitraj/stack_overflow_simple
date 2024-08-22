@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media/bloc/sign_up_bloc/sign_up_bloc.dart';
@@ -84,7 +83,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             TextFormField(
                               controller: username,
                               decoration: InputDecoration(
-                                hintText: 'Enter Email Here',
+                                hintText: 'Enter Your Email Here',
                                   border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(25))),
                             ),
@@ -97,7 +96,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               controller: pass,
                               obscureText: true,
                               decoration: InputDecoration(
-                                hintText: 'Enter Password Here',
+                                hintText: 'Enter Your Password Here',
                                   border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(25))),
                             ),
@@ -105,9 +104,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             Align(
                               alignment: Alignment.bottomRight,
                               child: GestureDetector(
-                                  onTap: () {
-                                    Navigator.of(context).pop();
-                                  },
+                                  onTap: () => Navigator.of(context).pop(),
                                   child: const Text(
                                     'Already A User? Login Here',
                                     style: TextStyle(color: Colors.blue),

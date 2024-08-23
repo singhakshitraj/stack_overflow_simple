@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class GetPosts {
   Future<dynamic> getPosts() async {
-    List<Map<String,dynamic>> list = [];
+    List<Map<String, dynamic>> list = [];
     await FirebaseFirestore.instance
         .collection('posts')
         .get()

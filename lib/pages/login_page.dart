@@ -8,6 +8,7 @@ import 'package:social_media/bloc/login_bloc/login_event.dart';
 import 'package:social_media/bloc/login_bloc/login_state.dart';
 import 'package:social_media/constants/enums.dart';
 import 'package:social_media/constants/themes.dart';
+import 'package:social_media/pages/new_page.dart';
 import 'package:social_media/pages/signup_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -28,7 +29,7 @@ class _SignUpPageState extends State<LoginPage> {
             previous.loadingState != current.loadingState,
         builder: (context, state) {
           if (state.loadingState == LoadingState.done) {
-            return const Center(child: Text('Done'));
+            return const NewPage();
           } else if (state.loadingState == LoadingState.error) {
             if (kDebugMode) {
               print(state.message.toString());
@@ -43,7 +44,6 @@ class _SignUpPageState extends State<LoginPage> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Container(
-                      color: const Color.fromARGB(255, 40, 39, 39),
                       child: Padding(
                         padding: const EdgeInsets.all(15.0),
                         child: Column(
@@ -101,8 +101,9 @@ class _SignUpPageState extends State<LoginPage> {
                               alignment: Alignment.bottomRight,
                               child: GestureDetector(
                                   onTap: () {
-                                    Navigator.of(context).push(
-                                            PageTransition(type: PageTransitionType.rightToLeft,child:  const SignUpPage()));
+                                    Navigator.of(context).push(PageTransition(
+                                        type: PageTransitionType.rightToLeft,
+                                        child: const SignUpPage()));
                                   },
                                   child: const Text(
                                     'New User? Register Here',
@@ -120,10 +121,19 @@ class _SignUpPageState extends State<LoginPage> {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20)),
                                 ),
-                                child:
-                                    (state.loadingState == LoadingState.loading)
-                                        ? const CircularProgressIndicator()
-                                        : const Text('Login'))
+                                child: switch (state.loadingState) {
+                                  LoadingState.loading =>
+                                    const CircularProgressIndicator(),
+                                  LoadingState.done => const NewPage(),
+                                  LoadingState.error => const Text('Error'),
+                                  LoadingState.notInitiated =>
+                                    const Text('Login'),
+                                } /*(
+                                        state.loadingState ==
+                                            LoadingState.loading)
+                                    ? const CircularProgressIndicator()
+                                    : const Text('Login') */
+                                )
                           ],
                         ),
                       ),

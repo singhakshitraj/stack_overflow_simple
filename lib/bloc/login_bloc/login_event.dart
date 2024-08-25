@@ -6,7 +6,7 @@ abstract class LoginEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class Loggingin extends LoginEvent{
+class Loggingin extends LoginEvent {
   final String userName;
   final String password;
   const Loggingin({
@@ -14,5 +14,7 @@ class Loggingin extends LoginEvent{
     required this.password,
   });
   @override
-  List<Object?> get props => [userName,password];
+  List<Object?> get props => [userName, password];
 }
+
+class LogoutEvent extends LoginEvent {}

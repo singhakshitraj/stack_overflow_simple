@@ -71,9 +71,3 @@ ThemeData darkTheme(BuildContext context) {
     ),
   );
 }
-
-TextStyle whiteText = const TextStyle(
-  color: Colors.white,
-);
-
-Color themeColor = const Color.fromARGB(255, 13, 47, 47);

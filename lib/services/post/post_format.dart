@@ -5,9 +5,8 @@ class PostFormat {
   Map<String, dynamic> toPost(Map<String, dynamic> toUpload) {
     Map<String, dynamic> mp = {};
     mp['madeAt'] = DateTime.now().toString();
-    mp['madeBy'] = (AuthServices().currentUser?.displayName == null)
-        ? 'guest'
-        : AuthServices().currentUser?.displayName;
+    mp['madeBy'] =
+        (AuthServices().username == null) ? 'guest' : AuthServices().username;
     mp['content'] = toUpload['content'];
     mp['open'] = true;
     mp['upvotes'] = 0;

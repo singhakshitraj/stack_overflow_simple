@@ -15,6 +15,14 @@ class PostServices {
     );
   }
 
+  Future<void> upvote(String id) async {
+    final x = await FirebaseFirestore.instance
+        .collection('posts')
+        .doc(id)
+        .get()
+        .then((snap) => snap.data()!['upvotes'] + 1);
+  }
+
   Future<void> postComments(String id, Map<String, dynamic> comment) async {
     final comments = (await FirebaseFirestore.instance
         .collection('posts')
@@ -26,5 +34,19 @@ class PostServices {
         .collection('posts')
         .doc(id)
         .set({'comments': comments}, SetOptions(merge: true));
+  }
+
+  Future<void> closeIssue(String id) async {
+    await FirebaseFirestore.instance
+        .collection('posts')
+        .doc(id)
+        .set({'open': false}, SetOptions(merge: true));
+  }
+
+  Future<void> openIssue(String id) async {
+    await FirebaseFirestore.instance
+        .collection('posts')
+        .doc(id)
+        .set({'open': true}, SetOptions(merge: true));
   }
 }

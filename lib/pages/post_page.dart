@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media/bloc/list_bloc/list_bloc.dart';
 import 'package:social_media/bloc/list_bloc/list_event.dart';
 import 'package:social_media/services/post/post_format.dart';
-import 'package:social_media/services/post/post_services.dart';
 
 class PostPage extends StatefulWidget {
   const PostPage({super.key});
@@ -27,8 +26,8 @@ class _PostPageState extends State<PostPage> {
       ),
       body: SingleChildScrollView(
         child: Center(
-          child: Container(
-            width: min(400, MediaQuery.of(context).size.width * 0.8),
+          child: SizedBox(
+            width: min(400, MediaQuery.of(context).size.width),
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Align(
@@ -92,27 +91,15 @@ class _PostPageState extends State<PostPage> {
                     ),
                     const SizedBox(height: 20),
                     SizedBox(
-                      height: 30,
                       width: MediaQuery.of(context).size.width,
-                      child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          separatorBuilder: (context, index) => const Divider(
-                                height: 5,
-                              ),
-                          itemCount: hashtags.length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              height: 100,
-                              child: ElevatedButton.icon(
-                                  icon: const Icon(Icons.delete),
-                                  onPressed: () {
-                                    setState(() {
-                                      hashtags.remove(hashtags[index]);
-                                    });
-                                  },
-                                  label: Text(hashtags[index])),
-                            );
-                          }),
+                      child: Wrap(
+                        spacing: 10,
+                        runSpacing: 7.5,
+                        children: List.generate(hashtags.length, (index) {
+                          return ElevatedButton(
+                              onPressed: () {}, child: Text(hashtags[index]));
+                        }),
+                      ),
                     ),
                   ],
                 ),

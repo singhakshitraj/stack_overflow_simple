@@ -21,11 +21,4 @@ class AddToListEvent extends ListEvent {
   List<Object?> get props => [post];
 }
 
-class UpVoteEvent extends ListEvent {
-  final int index;
-  const UpVoteEvent({
-    required this.index,
-  });
-  @override
-  List<Object?> get props => [index];
-}
+class RefreshEvent extends ListEvent {}

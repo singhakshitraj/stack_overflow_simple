@@ -11,4 +11,13 @@ class GetPosts {
             snapshot.docs.forEach((item) => list.add(item.data())));
     return list;
   }
+
+  Future<dynamic> getPostData(String docId) async {
+    final postData = await FirebaseFirestore.instance
+        .collection('posts')
+        .doc(docId)
+        .get()
+        .then((doc) => doc.data());
+    return postData;
+  }
 }

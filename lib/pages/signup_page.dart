@@ -2,10 +2,12 @@ import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:social_media/bloc/sign_up_bloc/sign_up_bloc.dart';
 import 'package:social_media/bloc/sign_up_bloc/sign_up_event.dart';
 import 'package:social_media/bloc/sign_up_bloc/sign_up_state.dart';
 import 'package:social_media/constants/enums.dart';
+import 'package:social_media/pages/login_page.dart';
 import 'package:social_media/pages/main_page.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -16,10 +18,18 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  TextEditingController username = TextEditingController();
+  TextEditingController pass = TextEditingController();
+
+  @override
+  void initState() {
+    username.clear();
+    pass.clear();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    TextEditingController username = TextEditingController();
-    TextEditingController pass = TextEditingController();
     return Scaffold(
       body: BlocBuilder<SignUpBloc, SignUpState>(
         buildWhen: (previous, current) =>
@@ -28,7 +38,16 @@ class _SignUpPageState extends State<SignUpPage> {
           if (state.loadingState == LoadingState.done) {
             return const MainPage();
           } else if (state.loadingState == LoadingState.error) {
-            return Center(child: Text(state.message.toString()));
+            return AlertDialog(
+              content: const Text('Invalid Credentials. Try Again...'),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      context.read<SignUpBloc>().add(SignOut());
+                    },
+                    child: const Text('OKAY!!')),
+              ],
+            );
           } else {
             return SingleChildScrollView(
               child: Center(
@@ -122,7 +141,14 @@ class _SignUpPageState extends State<SignUpPage> {
                           Align(
                             alignment: Alignment.bottomRight,
                             child: GestureDetector(
-                                onTap: () => Navigator.of(context).pop(),
+                                onTap: () {
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                      PageTransition(
+                                          type: PageTransitionType
+                                              .leftToRightWithFade,
+                                          child: const LoginPage()),
+                                      (_) => false);
+                                },
                                 child: const Text(
                                   'Already A User? Login Here',
                                   style: TextStyle(color: Colors.blue),
@@ -134,20 +160,21 @@ class _SignUpPageState extends State<SignUpPage> {
                                 context.read<SignUpBloc>().add(SignUp(
                                     userName: username.text,
                                     password: pass.text));
-                                print(FirebaseAuth
-                                    .instance.currentUser?.displayName);
                               },
                               style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20)),
                               ),
-                              child:
-                                  (state.loadingState == LoadingState.loading)
-                                      ? const Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: CircularProgressIndicator(),
-                                        )
-                                      : const Text('Sign-Up'))
+                              child: switch (state.loadingState) {
+                                LoadingState.loading => const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                LoadingState.done => const MainPage(),
+                                LoadingState.error => const Text('Error'),
+                                LoadingState.notInitiated =>
+                                  const Text('Sign-Up'),
+                              })
                         ],
                       ),
                     ),

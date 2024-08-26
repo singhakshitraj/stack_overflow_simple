@@ -16,6 +16,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.6
+  getwidget: ^4.0.0
   google_fonts: ^6.2.1
   page_transition:
 

@@ -41,19 +41,17 @@ class _DetailsPageState extends State<DetailsPage> {
                   return PopupMenuButton(
                       itemBuilder: (context) => [
                             PopupMenuItem(
-                                child: TextButton(
                               child: (isOpen)
                                   ? const Text('Close Issue')
                                   : const Text('Open Issue'),
-                              onPressed: () {
+                              onTap: () {
                                 (isOpen)
                                     ? context.read<DetailsBloc>().add(
                                         CloseIssueEvent(id: state.data['id']))
                                     : context.read<DetailsBloc>().add(
                                         OpenIssueEvent(id: state.data['id']));
-                                Navigator.pop(context);
                               },
-                            ))
+                            )
                           ]);
                 } else {
                   return const Text('');
@@ -113,8 +111,17 @@ class _DetailsPageState extends State<DetailsPage> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(state.data['content'].toString()),
-                              const SizedBox(height: 30),
+                              const SizedBox(height: 15),
+                              Text(
+                                state.data['title'].toString(),
+                                style: const TextStyle(fontSize: 18),
+                              ),
+                              const SizedBox(height: 15),
+                              Text(
+                                state.data['content'].toString(),
+                                style: const TextStyle(fontSize: 15),
+                              ),
+                              const SizedBox(height: 15),
                               (state.data['tags'].length > 0)
                                   ? Align(
                                       alignment: Alignment.topLeft,
@@ -214,8 +221,6 @@ class _DetailsPageState extends State<DetailsPage> {
                               };
                               context.read<DetailsBloc>().add(AddCommentEvent(
                                   comment: comment, id: widget.details['id']));
-                              /*PostServices().postComments(widget.details['id'],
-                                  PostFormat().toComment(comment));*/
                               setState(() {
                                 Navigator.of(context).pop();
                               });

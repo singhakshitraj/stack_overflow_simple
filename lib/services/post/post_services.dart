@@ -15,14 +15,6 @@ class PostServices {
     );
   }
 
-  Future<void> upvote(String id) async {
-    final x = await FirebaseFirestore.instance
-        .collection('posts')
-        .doc(id)
-        .get()
-        .then((snap) => snap.data()!['upvotes'] + 1);
-  }
-
   Future<void> postComments(String id, Map<String, dynamic> comment) async {
     final comments = (await FirebaseFirestore.instance
         .collection('posts')

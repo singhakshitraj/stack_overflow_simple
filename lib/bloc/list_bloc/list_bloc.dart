@@ -6,8 +6,6 @@ import 'package:social_media/services/get/get_posts.dart';
 import 'package:social_media/services/post/post_services.dart';
 
 class ListBloc extends Bloc<ListEvent, ListState> {
-  //late List<Map<String, dynamic>> posts;
-  num isChanged = 0;
   ListBloc() : super(const ListState()) {
     on<GetListEvent>(_getList);
     on<AddToListEvent>(_addToList);
@@ -26,7 +24,7 @@ class ListBloc extends Bloc<ListEvent, ListState> {
     emit(state.copyWith(posts, StateOfList.done));
   }
 
-  void _refresh(RefreshEvent event, Emitter<ListState> emit)  async {
+  void _refresh(RefreshEvent event, Emitter<ListState> emit) async {
     emit(state.copyWith(null, StateOfList.loading));
     final List<Map<String, dynamic>> posts = await GetPosts().getPosts();
     emit(state.copyWith(posts, StateOfList.done));

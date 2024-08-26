@@ -14,6 +14,7 @@ class SignUp extends SignUpEvent {
     required this.password,
   });
   @override
-  List<Object?> get props => [userName,password];
+  List<Object?> get props => [userName, password];
 }
 
+class SignOut extends SignUpEvent {}

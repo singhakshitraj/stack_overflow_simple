@@ -14,10 +14,10 @@ class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _SignUpPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _SignUpPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> {
   TextEditingController username = TextEditingController();
   TextEditingController pass = TextEditingController();
   @override
@@ -37,10 +37,16 @@ class _SignUpPageState extends State<LoginPage> {
           if (state.loadingState == LoadingState.done) {
             return const MainPage();
           } else if (state.loadingState == LoadingState.error) {
-            if (kDebugMode) {
-              print(state.message.toString());
-            }
-            return const Center(child: Text('Error'));
+            return AlertDialog(
+              content: const Text('Invalid Credentials. Try Again...'),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      context.read<LoginBloc>().add(LogoutEvent());
+                    },
+                    child: const Text('OKAY!!')),
+              ],
+            );
           } else {
             return SingleChildScrollView(
               child: Center(
@@ -105,9 +111,11 @@ class _SignUpPageState extends State<LoginPage> {
                             alignment: Alignment.bottomRight,
                             child: GestureDetector(
                                 onTap: () {
-                                  Navigator.of(context).push(PageTransition(
-                                      type: PageTransitionType.rightToLeft,
-                                      child: const SignUpPage()));
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                      PageTransition(
+                                          type: PageTransitionType.rightToLeft,
+                                          child: const SignUpPage()),
+                                      (_) => false);
                                 },
                                 child: const Text(
                                   'New User? Register Here',

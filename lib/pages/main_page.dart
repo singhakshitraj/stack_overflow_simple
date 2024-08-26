@@ -6,6 +6,8 @@ import 'package:social_media/bloc/list_bloc/list_event.dart';
 import 'package:social_media/bloc/list_bloc/list_state.dart';
 import 'package:social_media/bloc/login_bloc/login_bloc.dart';
 import 'package:social_media/bloc/login_bloc/login_event.dart';
+import 'package:social_media/bloc/sign_up_bloc/sign_up_bloc.dart';
+import 'package:social_media/bloc/sign_up_bloc/sign_up_event.dart';
 import 'package:social_media/constants/enums.dart';
 import 'package:social_media/constants/time_diff.dart';
 import 'package:social_media/pages/details_page.dart';
@@ -46,6 +48,7 @@ class _MainPage extends State<MainPage> {
             child: ElevatedButton.icon(
               onPressed: () async {
                 context.read<LoginBloc>().add(LogoutEvent());
+                context.read<SignUpBloc>().add(SignOut());
                 Navigator.of(context).pushAndRemoveUntil(
                     PageTransition(
                         child: const LoginPage(),
@@ -93,11 +96,73 @@ class _MainPage extends State<MainPage> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                '@${state.posts[index]['madeBy']}',
+                                                style: const TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.blue),
+                                              ),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              Container(
+                                                color: Colors.black,
+                                                height: 10,
+                                                width: 1,
+                                              ),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              (state.posts[index]['open'] ==
+                                                      true)
+                                                  ? const CircleAvatar(
+                                                      backgroundColor:
+                                                          Colors.green,
+                                                      radius: 5,
+                                                    )
+                                                  : const CircleAvatar(
+                                                      backgroundColor:
+                                                          Colors.red,
+                                                      radius: 5,
+                                                    ),
+                                              const SizedBox(width: 10),
+                                              (state.posts[index]['open'] ==
+                                                      true)
+                                                  ? const Text('Open')
+                                                  : const Text('Closed'),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              Container(
+                                                color: Colors.black,
+                                                height: 10,
+                                                width: 1,
+                                              ),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              Align(
+                                                  alignment:
+                                                      Alignment.bottomLeft,
+                                                  child: Text(
+                                                    DateTimeDifference()
+                                                        .getDiff(
+                                                            state.posts[index]
+                                                                ['madeAt'],
+                                                            DateTime.now()),
+                                                    style: const TextStyle(
+                                                        fontSize: 12),
+                                                  )),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 10),
                                           Text(
-                                            '@${state.posts[index]['madeBy']}',
-                                            style: const TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.blue),
+                                            state.posts[index]['title']
+                                                .toString(),
+                                            style:
+                                                const TextStyle(fontSize: 18),
                                           ),
                                           const SizedBox(height: 10),
                                           (state.posts[index]['content']
@@ -105,9 +170,9 @@ class _MainPage extends State<MainPage> {
                                                       .length >
                                                   100)
                                               ? Text(
-                                                  '${state.posts[index]['content'].toString().substring(0, 100)}...',
+                                                  '${state.posts[index]['content'].toString().substring(0, 200)}...',
                                                   style: const TextStyle(
-                                                      fontSize: 16),
+                                                      fontSize: 13),
                                                 )
                                               : Text(
                                                   state.posts[index]['content']
@@ -162,51 +227,9 @@ class _MainPage extends State<MainPage> {
                                                   ],
                                                 )
                                               : const SizedBox(height: 1),
-                                          Container(
-                                              margin: const EdgeInsets.only(
-                                                  left: 16),
-                                              child: Align(
-                                                  alignment:
-                                                      Alignment.bottomLeft,
-                                                  child: Text(
-                                                    DateTimeDifference()
-                                                        .getDiff(
-                                                            state.posts[index]
-                                                                ['madeAt'],
-                                                            DateTime.now()),
-                                                    style: const TextStyle(
-                                                        fontSize: 12),
-                                                  ))),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              const SizedBox(width: 20),
-                                              Text(state.posts[index]['upvotes']
-                                                  .toString()),
-                                              const SizedBox(width: 20),
-                                              (state.posts[index]['open'] ==
-                                                      true)
-                                                  ? const CircleAvatar(
-                                                      backgroundColor:
-                                                          Colors.green,
-                                                      radius: 5,
-                                                    )
-                                                  : const CircleAvatar(
-                                                      backgroundColor:
-                                                          Colors.red,
-                                                      radius: 5,
-                                                    ),
-                                              const SizedBox(width: 5),
-                                              (state.posts[index]['open'] ==
-                                                      true)
-                                                  ? const Text('Open')
-                                                  : const Text('Closed'),
-                                            ],
-                                          )
                                         ],
                                       ),
                                     ),

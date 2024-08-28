@@ -8,6 +8,7 @@ class PostServices {
         .then((docs) => addId(docs.id));
   }
 
+  // ADDS ID TO THE FIRESTORE DATABASE
   Future<void> addId(String id) async {
     await FirebaseFirestore.instance.collection('posts').doc(id).set(
       {'id': id},

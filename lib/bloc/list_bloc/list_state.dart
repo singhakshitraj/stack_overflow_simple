@@ -2,17 +2,25 @@ import 'package:equatable/equatable.dart';
 import 'package:social_media/constants/enums.dart';
 
 class ListState extends Equatable {
-  final List<Map<String, dynamic>> posts;
-  final StateOfList stateOfList;
-  const ListState({
-    this.posts = const [],
-    this.stateOfList = StateOfList.loading,
-  });
-  @override
-  List<Object?> get props => [posts, stateOfList];
+  final bool? isLiked;
+  final bool? isBookmarked;
+  final num? count;
+  final TileStatus tileStatus;
+  const ListState(
+      {this.isBookmarked = false,
+      this.isLiked = false,
+      this.count = 0,
+      this.tileStatus = TileStatus.notInitiated});
 
-  ListState copyWith(List<Map<String, dynamic>>? posts, StateOfList? stateOfList) {
+  ListState copyWith(
+      bool? isLiked, bool? isBookmarked, num? count, TileStatus? tileStatus) {
     return ListState(
-        posts: posts ?? this.posts, stateOfList: stateOfList ?? this.stateOfList);
+        isBookmarked: isBookmarked ?? this.isBookmarked,
+        isLiked: isLiked ?? this.isLiked,
+        count: count ?? this.count,
+        tileStatus: tileStatus ?? this.tileStatus);
   }
+
+  @override
+  List<Object?> get props => [isBookmarked, isLiked, count, tileStatus];
 }

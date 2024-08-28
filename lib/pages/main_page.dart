@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:social_media/bloc/list_bloc/list_bloc.dart';
-import 'package:social_media/bloc/list_bloc/list_event.dart';
-import 'package:social_media/bloc/list_bloc/list_state.dart';
+import 'package:social_media/bloc/post_bloc/post_bloc.dart';
+import 'package:social_media/bloc/post_bloc/post_event.dart';
+import 'package:social_media/bloc/post_bloc/post_state.dart';
 import 'package:social_media/bloc/login_bloc/login_bloc.dart';
 import 'package:social_media/bloc/login_bloc/login_event.dart';
 import 'package:social_media/bloc/sign_up_bloc/sign_up_bloc.dart';
@@ -13,7 +13,6 @@ import 'package:social_media/constants/time_diff.dart';
 import 'package:social_media/pages/details_page.dart';
 import 'package:social_media/pages/login_page.dart';
 import 'package:social_media/pages/post_page.dart';
-import 'package:social_media/services/auth/auth_services.dart';
 import 'dart:math';
 
 class MainPage extends StatefulWidget {
@@ -27,7 +26,7 @@ class _MainPage extends State<MainPage> {
   final TextEditingController cont = TextEditingController();
   @override
   void initState() {
-    context.read<ListBloc>().add(const GetListEvent());
+    context.read<PostBloc>().add(const GetPostEvent());
     super.initState();
   }
 
@@ -62,8 +61,8 @@ class _MainPage extends State<MainPage> {
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: () async => context.read<ListBloc>().add(RefreshEvent()),
-        child: BlocBuilder<ListBloc, ListState>(
+        onRefresh: () async => context.read<PostBloc>().add(RefreshEvent()),
+        child: BlocBuilder<PostBloc, PostState>(
           buildWhen: (previous, current) =>
               previous.stateOfList != current.stateOfList,
           builder: (context, state) {
@@ -172,13 +171,13 @@ class _MainPage extends State<MainPage> {
                                               ? Text(
                                                   '${state.posts[index]['content'].toString().substring(0, 200)}...',
                                                   style: const TextStyle(
-                                                      fontSize: 13),
+                                                      fontSize: 14),
                                                 )
                                               : Text(
                                                   state.posts[index]['content']
                                                       .toString(),
                                                   style: const TextStyle(
-                                                      fontSize: 16),
+                                                      fontSize: 14),
                                                 ),
                                           const SizedBox(height: 10),
                                           (state.posts[index]['tags'].length >
@@ -209,7 +208,7 @@ class _MainPage extends State<MainPage> {
                                                                       right:
                                                                           10),
                                                               child:
-                                                                  ElevatedButton(
+                                                                  OutlinedButton(
                                                                       onPressed:
                                                                           () {},
                                                                       child:
@@ -227,9 +226,7 @@ class _MainPage extends State<MainPage> {
                                                   ],
                                                 )
                                               : const SizedBox(height: 1),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
+                                          const SizedBox(height: 10),
                                         ],
                                       ),
                                     ),

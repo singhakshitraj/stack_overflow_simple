@@ -1,13 +1,16 @@
 import 'dart:math';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media/bloc/details_bloc/details_bloc.dart';
 import 'package:social_media/bloc/details_bloc/details_event.dart';
+import 'package:social_media/bloc/list_bloc/list_event.dart';
+import 'package:social_media/bloc/list_bloc/list_state.dart';
 import 'package:social_media/constants/enums.dart';
+import 'package:social_media/constants/themes.dart';
 import 'package:social_media/services/auth/auth_services.dart';
-
 import '../bloc/details_bloc/details_state.dart';
+import '../bloc/list_bloc/list_bloc.dart';
 import '../constants/time_diff.dart';
 
 class DetailsPage extends StatefulWidget {
@@ -22,6 +25,9 @@ class _DetailsPageState extends State<DetailsPage> {
   @override
   void initState() {
     context.read<DetailsBloc>().add(GetDataEvent(id: widget.details['id']));
+    context
+        .read<ListBloc>()
+        .add(GetInitialDataEvent(postId: widget.details['id']));
     super.initState();
   }
 
@@ -78,8 +84,11 @@ class _DetailsPageState extends State<DetailsPage> {
                     children: [
                       const SizedBox(height: 20),
                       ListTile(
-                        // ignore: prefer_interpolation_to_compose_strings
-                        title: Text('Posted By - ' + state.data['madeBy']),
+                        title: Text(
+                          // ignore: prefer_interpolation_to_compose_strings
+                          '@' + state.data['madeBy'],
+                          style: const TextStyle(color: Colors.blue),
+                        ),
                         subtitle: Row(
                           children: [
                             Text(DateTimeDifference()
@@ -111,7 +120,6 @@ class _DetailsPageState extends State<DetailsPage> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const SizedBox(height: 15),
                               Text(
                                 state.data['title'].toString(),
                                 style: const TextStyle(fontSize: 18),
@@ -130,7 +138,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                         runSpacing: 7.5,
                                         children: List.generate(
                                             state.data['tags'].length, (index) {
-                                          return ElevatedButton(
+                                          return OutlinedButton(
                                               onPressed: () {},
                                               child: Text(
                                                   state.data['tags'][index]));
@@ -145,6 +153,123 @@ class _DetailsPageState extends State<DetailsPage> {
                           ),
                         ),
                       ),
+                      const SizedBox(height: 10),
+                      SizedBox(
+                        height: 60,
+                        child: BlocBuilder<ListBloc, ListState>(
+                          builder: (context, state) {
+                            if (state.tileStatus == TileStatus.loading ||
+                                state.tileStatus == TileStatus.notInitiated) {
+                              return const SizedBox(
+                                  height: 60,
+                                  child: Center(
+                                    child: Text(
+                                        'Please Wait While Status Bar Is Being Loaded ... '),
+                                  ));
+                            } else if (state.tileStatus == TileStatus.error) {
+                              return const SizedBox(
+                                height: 60,
+                                child: Center(
+                                    child: Text(
+                                        'Error Occurred While Doing Operation')),
+                              );
+                            } else if (state.tileStatus ==
+                                TileStatus.processing) {
+                              return const SizedBox(
+                                height: 60,
+                                child: Center(
+                                    child: Text('Processing Your Request')),
+                              );
+                            } else {
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Expanded(flex: 1, child: SizedBox()),
+                                  Expanded(
+                                    flex: 20,
+                                    child: SizedBox(
+                                      height: 60,
+                                      child: (state.isLiked!)
+                                          ? ElevatedButton(
+                                              style: buttonStyle(),
+                                              onPressed: () async {
+                                                context.read<ListBloc>().add(
+                                                    RemoveFromLikedEvent(
+                                                        postId: widget
+                                                            .details['id']));
+                                              },
+                                              child: const Row(
+                                                children: [
+                                                  Icon(CupertinoIcons
+                                                      .heart_fill),
+                                                  SizedBox(width: 20),
+                                                  Text('ADD TO LIKED'),
+                                                ],
+                                              ))
+                                          : OutlinedButton(
+                                              style: buttonStyle(),
+                                              onPressed: () async {
+                                                context.read<ListBloc>().add(
+                                                    AddToLikedEvent(
+                                                        postId: widget
+                                                            .details['id']));
+                                              },
+                                              child: const Row(
+                                                children: [
+                                                  Icon(CupertinoIcons.heart),
+                                                  SizedBox(width: 20),
+                                                  Text('ADD TO LIKED'),
+                                                ],
+                                              )),
+                                    ),
+                                  ),
+                                  const Expanded(flex: 1, child: SizedBox()),
+                                  Expanded(
+                                    flex: 20,
+                                    child: SizedBox(
+                                      height: 60,
+                                      child: (state.isBookmarked!)
+                                          ? ElevatedButton(
+                                              style: buttonStyle(),
+                                              onPressed: () async {
+                                                context.read<ListBloc>().add(
+                                                    RemoveFromBookmarkEvent(
+                                                        postId: widget
+                                                            .details['id']));
+                                              },
+                                              child: const Row(
+                                                children: [
+                                                  Icon(CupertinoIcons
+                                                      .bookmark_fill),
+                                                  SizedBox(width: 20),
+                                                  Text('ADD TO BOOKMARKS'),
+                                                ],
+                                              ))
+                                          : OutlinedButton(
+                                              style: buttonStyle(),
+                                              onPressed: () async {
+                                                context.read<ListBloc>().add(
+                                                    AddToBookmarkEvent(
+                                                        postId: widget
+                                                            .details['id']));
+                                              },
+                                              child: const Row(
+                                                children: [
+                                                  Icon(CupertinoIcons.bookmark),
+                                                  SizedBox(width: 20),
+                                                  Text('ADD TO BOOKMARKS'),
+                                                ],
+                                              )),
+                                    ),
+                                  ),
+                                  const Expanded(flex: 1, child: SizedBox()),
+                                ],
+                              );
+                            }
+                          },
+                        ),
+                      ),
                       const SizedBox(height: 20),
                       const Text('Comments'),
                       const SizedBox(
@@ -156,7 +281,9 @@ class _DetailsPageState extends State<DetailsPage> {
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
                             return Card(
-                              margin: const EdgeInsets.all(10),
+                              elevation: 0,
+                              margin: const EdgeInsets.only(
+                                  left: 10, right: 10, top: 3),
                               child: ListTile(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(15),

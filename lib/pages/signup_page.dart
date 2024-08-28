@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
@@ -20,11 +19,12 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   TextEditingController username = TextEditingController();
   TextEditingController pass = TextEditingController();
-
+  TextEditingController name = TextEditingController();
   @override
   void initState() {
     username.clear();
     pass.clear();
+    name.clear();
     super.initState();
   }
 
@@ -84,23 +84,9 @@ class _SignUpPageState extends State<SignUpPage> {
                               )),
                           const SizedBox(height: 10),
                           TextFormField(
+                            controller: name,
                             decoration: InputDecoration(
                                 hintText: 'Enter Name Here',
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(25))),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                'Enter Your Age Here - ',
-                              )),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            decoration: InputDecoration(
-                                hintText: 'Enter Age Here',
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(25))),
                           ),
@@ -158,6 +144,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           ElevatedButton(
                               onPressed: () {
                                 context.read<SignUpBloc>().add(SignUp(
+                                    name: name.text,
                                     userName: username.text,
                                     password: pass.text));
                               },

@@ -9,7 +9,7 @@ ThemeData lightTheme(BuildContext context) {
       onPrimary: Color(0xffffffff),
       primaryContainer: Color(0xffffdada),
       onPrimaryContainer: Color(0xff40000b),
-      secondary: Color(0xff775654),
+      secondary: Color(0xff9d384b),
       onSecondary: Color(0xffffffff),
       secondaryContainer: Color(0xffffdad7),
       onSecondaryContainer: Color(0xff2c1513),
@@ -69,5 +69,11 @@ ThemeData darkTheme(BuildContext context) {
       inversePrimary: Color(0xffaf2b3d),
       surfaceTint: Color(0xffffb3b5),
     ),
+  );
+}
+
+ButtonStyle buttonStyle() {
+  return ElevatedButton.styleFrom(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(90)),
   );
 }

@@ -5,8 +5,16 @@ enum LoadingState {
   notInitiated,
 }
 
-enum StateOfList{
+enum StateOfList {
   adding,
   done,
   loading,
+}
+
+enum TileStatus {
+  loading,
+  done,
+  error,
+  notInitiated,
+  processing,
 }

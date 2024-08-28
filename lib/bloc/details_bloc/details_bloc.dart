@@ -2,9 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:social_media/bloc/details_bloc/details_event.dart';
 import 'package:social_media/bloc/details_bloc/details_state.dart';
 import 'package:social_media/constants/enums.dart';
-import 'package:social_media/services/get/get_posts.dart';
-import 'package:social_media/services/post/post_format.dart';
-import 'package:social_media/services/post/post_services.dart';
+import 'package:social_media/services/firestore/get/get_posts.dart';
+import 'package:social_media/services/firestore/post/post_format.dart';
+import 'package:social_media/services/firestore/post/post_services.dart';
 
 class DetailsBloc extends Bloc<DetailsEvent, DetailsState> {
   DetailsBloc() : super(const DetailsState()) {

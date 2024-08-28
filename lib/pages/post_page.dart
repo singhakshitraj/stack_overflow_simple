@@ -2,10 +2,10 @@ import 'dart:math';
 import 'package:getwidget/getwidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media/bloc/list_bloc/list_bloc.dart';
-import 'package:social_media/bloc/list_bloc/list_event.dart';
+import 'package:social_media/bloc/post_bloc/post_bloc.dart';
+import 'package:social_media/bloc/post_bloc/post_event.dart';
 import 'package:social_media/services/auth/auth_services.dart';
-import 'package:social_media/services/post/post_format.dart';
+import 'package:social_media/services/firestore/post/post_format.dart';
 
 class PostPage extends StatefulWidget {
   const PostPage({super.key});
@@ -19,6 +19,7 @@ class _PostPageState extends State<PostPage> {
   final TextEditingController _hashtags = TextEditingController();
   final TextEditingController _title = TextEditingController();
   List<String> hashtags = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -122,7 +123,7 @@ class _PostPageState extends State<PostPage> {
                         runSpacing: 7.5,
                         children: List.generate(hashtags.length, (index) {
                           return ElevatedButton.icon(
-                              icon: Icon(Icons.delete),
+                              icon: const Icon(Icons.delete),
                               onPressed: () {
                                 setState(() {
                                   hashtags.removeAt(index);
@@ -141,7 +142,7 @@ class _PostPageState extends State<PostPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          context.read<ListBloc>().add(AddToListEvent(
+          context.read<PostBloc>().add(AddToPostEvent(
                   post: PostFormat().toPost({
                 'content': _content.text,
                 'tags': hashtags.toList(),
@@ -151,7 +152,7 @@ class _PostPageState extends State<PostPage> {
         },
         child: const Icon(Icons.chevron_right_sharp),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }

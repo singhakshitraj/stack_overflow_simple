@@ -10,6 +10,7 @@ import 'package:social_media/firebase_options.dart';
 import 'package:social_media/pages/login_page.dart';
 import 'package:social_media/pages/main_page.dart';
 import 'package:social_media/services/auth/auth_services.dart';
+import 'package:social_media/bloc/post_bloc/post_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,11 +32,13 @@ class MainApp extends StatelessWidget {
         BlocProvider(create: (_) => LoginBloc()),
         BlocProvider(create: (_) => ListBloc()),
         BlocProvider(create: (_) => DetailsBloc()),
+        BlocProvider(create: (_) => PostBloc()),
       ],
       child: MaterialApp(
         theme: lightTheme(context),
         darkTheme: darkTheme(context),
         home: (currentUser == null) ? const LoginPage() : const MainPage(),
+        //home: const MainPage(),
       ),
     );
   }

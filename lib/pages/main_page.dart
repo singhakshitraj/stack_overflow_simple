@@ -4,14 +4,10 @@ import 'package:page_transition/page_transition.dart';
 import 'package:social_media/bloc/post_bloc/post_bloc.dart';
 import 'package:social_media/bloc/post_bloc/post_event.dart';
 import 'package:social_media/bloc/post_bloc/post_state.dart';
-import 'package:social_media/bloc/login_bloc/login_bloc.dart';
-import 'package:social_media/bloc/login_bloc/login_event.dart';
-import 'package:social_media/bloc/sign_up_bloc/sign_up_bloc.dart';
-import 'package:social_media/bloc/sign_up_bloc/sign_up_event.dart';
+import 'package:social_media/constants/drawer.dart';
 import 'package:social_media/constants/enums.dart';
 import 'package:social_media/constants/time_diff.dart';
 import 'package:social_media/pages/details_page.dart';
-import 'package:social_media/pages/login_page.dart';
 import 'package:social_media/pages/post_page.dart';
 import 'dart:math';
 
@@ -34,6 +30,7 @@ class _MainPage extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: appDrawer(context),
       appBar: AppBar(
         elevation: 10,
         title: const Text(
@@ -41,24 +38,6 @@ class _MainPage extends State<MainPage> {
           style: TextStyle(letterSpacing: 2),
         ),
         centerTitle: true,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton.icon(
-              onPressed: () async {
-                context.read<LoginBloc>().add(LogoutEvent());
-                context.read<SignUpBloc>().add(SignOut());
-                Navigator.of(context).pushAndRemoveUntil(
-                    PageTransition(
-                        child: const LoginPage(),
-                        type: PageTransitionType.rightToLeft),
-                    (_) => false);
-              },
-              icon: const Icon(Icons.login_outlined),
-              label: const Text('LOGOUT'),
-            ),
-          ),
-        ],
       ),
       body: RefreshIndicator(
         onRefresh: () async => context.read<PostBloc>().add(RefreshEvent()),
@@ -167,7 +146,7 @@ class _MainPage extends State<MainPage> {
                                           (state.posts[index]['content']
                                                       .toString()
                                                       .length >
-                                                  100)
+                                                  200)
                                               ? Text(
                                                   '${state.posts[index]['content'].toString().substring(0, 200)}...',
                                                   style: const TextStyle(

@@ -1,36 +1,37 @@
 import 'dart:math';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:social_media/bloc/login_bloc/login_bloc.dart';
-import 'package:social_media/bloc/login_bloc/login_event.dart';
-import 'package:social_media/bloc/login_bloc/login_state.dart';
+import 'package:social_media/bloc/sign_up_bloc/sign_up_bloc.dart';
+import 'package:social_media/bloc/sign_up_bloc/sign_up_event.dart';
+import 'package:social_media/bloc/sign_up_bloc/sign_up_state.dart';
 import 'package:social_media/constants/enums.dart';
+import 'package:social_media/pages/auth/login_page.dart';
 import 'package:social_media/pages/main_page.dart';
-import 'package:social_media/pages/signup_page.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignUpPageState extends State<SignUpPage> {
   TextEditingController username = TextEditingController();
   TextEditingController pass = TextEditingController();
+  TextEditingController name = TextEditingController();
   @override
   void initState() {
     username.clear();
     pass.clear();
+    name.clear();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<LoginBloc, LoginState>(
+      body: BlocBuilder<SignUpBloc, SignUpState>(
         buildWhen: (previous, current) =>
             previous.loadingState != current.loadingState,
         builder: (context, state) {
@@ -42,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
               actions: [
                 TextButton(
                     onPressed: () {
-                      context.read<LoginBloc>().add(LogoutEvent());
+                      context.read<SignUpBloc>().add(SignOut());
                     },
                     child: const Text('OKAY!!')),
               ],
@@ -63,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           const SizedBox(height: 50),
                           const Icon(
-                            Icons.person,
+                            Icons.accessibility_outlined,
                             size: 250,
                           ),
                           const Center(
@@ -73,9 +74,25 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           const Text(
-                            'Login To Continue',
+                            'Sign Up To Continue',
                           ),
                           const SizedBox(height: 20),
+                          const Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                'Enter Your Name Here - ',
+                              )),
+                          const SizedBox(height: 10),
+                          TextFormField(
+                            controller: name,
+                            decoration: InputDecoration(
+                                hintText: 'Enter Name Here',
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(25))),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
                           const Align(
                               alignment: Alignment.topLeft,
                               child: Text(
@@ -85,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                           TextFormField(
                             controller: username,
                             decoration: InputDecoration(
-                                hintText: 'Enter Email Here',
+                                hintText: 'Enter Your Email Here',
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(25))),
                           ),
@@ -102,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                             controller: pass,
                             obscureText: true,
                             decoration: InputDecoration(
-                                hintText: 'Enter Password Here',
+                                hintText: 'Enter Your Password Here',
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(25))),
                           ),
@@ -113,19 +130,21 @@ class _LoginPageState extends State<LoginPage> {
                                 onTap: () {
                                   Navigator.of(context).pushAndRemoveUntil(
                                       PageTransition(
-                                          type: PageTransitionType.rightToLeft,
-                                          child: const SignUpPage()),
+                                          type: PageTransitionType
+                                              .leftToRightWithFade,
+                                          child: const LoginPage()),
                                       (_) => false);
                                 },
                                 child: const Text(
-                                  'New User? Register Here',
+                                  'Already A User? Login Here',
                                   style: TextStyle(color: Colors.blue),
                                 )),
                           ),
                           const SizedBox(height: 20),
                           ElevatedButton(
                               onPressed: () {
-                                context.read<LoginBloc>().add(Loggingin(
+                                context.read<SignUpBloc>().add(SignUp(
+                                    name: name.text,
                                     userName: username.text,
                                     password: pass.text));
                               },
@@ -141,7 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                                 LoadingState.done => const MainPage(),
                                 LoadingState.error => const Text('Error'),
                                 LoadingState.notInitiated =>
-                                  const Text('Login'),
+                                  const Text('Sign-Up'),
                               })
                         ],
                       ),

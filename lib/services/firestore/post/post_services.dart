@@ -1,11 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PostServices {
-  Future<void> post(Map<String, dynamic> data) async {
-    await FirebaseFirestore.instance
+  Future<String> post(Map<String, dynamic> data) async {
+    final docId = await FirebaseFirestore.instance
         .collection('posts')
         .add(data)
-        .then((docs) => addId(docs.id));
+        .then((docs) {
+      addId(docs.id);
+      return docs.id;
+    });
+    return docId;
   }
 
   // ADDS ID TO THE FIRESTORE DATABASE

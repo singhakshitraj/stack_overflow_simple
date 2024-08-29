@@ -1,21 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:social_media/services/firestore/get/get_posts.dart';
 
 class GetLists {
-  Future<bool> isLiked(String id, String postId) async {
-    final data = await FirebaseFirestore.instance
-        .doc(id)
+  // GET SAVED LISTS LIKE FAVORITE, SAVED AND BOOKMARKED POSTS
+  Future<List<Map<String, dynamic>>> getSavedList(
+      String docId, String parameter) async {
+    final rawData = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(docId)
         .get()
-        .then((value) => value['liked']);
-    final list = Set<String>.from(data);
-    return list.contains(postId);
-  }
-
-  Future<bool> isBookmarked(String id, String postId) async {
-    final data = await FirebaseFirestore.instance
-        .doc(id)
-        .get()
-        .then((value) => value['bookmarked']);
-    final list = Set<String>.from(data);
-    return list.contains(postId);
+        .then((val) => val.data()![parameter]);
+    List<Map<String, dynamic>> posts = [];
+    for (dynamic value in rawData) {
+      final post = await GetPosts().getPostData(value);
+      posts.add(post);
+    }
+    return posts;
   }
 }

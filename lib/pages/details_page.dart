@@ -2,15 +2,16 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:social_media/bloc/details_bloc/details_bloc.dart';
 import 'package:social_media/bloc/details_bloc/details_event.dart';
-import 'package:social_media/bloc/list_bloc/list_event.dart';
-import 'package:social_media/bloc/list_bloc/list_state.dart';
+import 'package:social_media/bloc/status_bloc/status_event.dart';
+import 'package:social_media/bloc/status_bloc/status_state.dart';
 import 'package:social_media/constants/enums.dart';
 import 'package:social_media/constants/themes.dart';
 import 'package:social_media/services/auth/auth_services.dart';
 import '../bloc/details_bloc/details_state.dart';
-import '../bloc/list_bloc/list_bloc.dart';
+import '../bloc/status_bloc/status_bloc.dart';
 import '../constants/time_diff.dart';
 
 class DetailsPage extends StatefulWidget {
@@ -26,7 +27,7 @@ class _DetailsPageState extends State<DetailsPage> {
   void initState() {
     context.read<DetailsBloc>().add(GetDataEvent(id: widget.details['id']));
     context
-        .read<ListBloc>()
+        .read<StatusBloc>()
         .add(GetInitialDataEvent(postId: widget.details['id']));
     super.initState();
   }
@@ -156,7 +157,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       const SizedBox(height: 10),
                       SizedBox(
                         height: 60,
-                        child: BlocBuilder<ListBloc, ListState>(
+                        child: BlocBuilder<StatusBloc, StatusState>(
                           builder: (context, state) {
                             if (state.tileStatus == TileStatus.loading ||
                                 state.tileStatus == TileStatus.notInitiated) {
@@ -173,13 +174,6 @@ class _DetailsPageState extends State<DetailsPage> {
                                     child: Text(
                                         'Error Occurred While Doing Operation')),
                               );
-                            } else if (state.tileStatus ==
-                                TileStatus.processing) {
-                              return const SizedBox(
-                                height: 60,
-                                child: Center(
-                                    child: Text('Processing Your Request')),
-                              );
                             } else {
                               return Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -194,32 +188,46 @@ class _DetailsPageState extends State<DetailsPage> {
                                           ? ElevatedButton(
                                               style: buttonStyle(),
                                               onPressed: () async {
-                                                context.read<ListBloc>().add(
+                                                await GFToast.showToast(
+                                                    toastPosition:
+                                                        GFToastPosition.BOTTOM,
+                                                    'Applying Changes...',
+                                                    context);
+                                                context.read<StatusBloc>().add(
                                                     RemoveFromLikedEvent(
                                                         postId: widget
-                                                            .details['id']));
+                                                            .details['id'],
+                                                        isBookmarked: state
+                                                            .isBookmarked!));
                                               },
                                               child: const Row(
                                                 children: [
                                                   Icon(CupertinoIcons
                                                       .heart_fill),
-                                                  SizedBox(width: 20),
-                                                  Text('ADD TO LIKED'),
+                                                  SizedBox(width: 10),
+                                                  Text('LIKED'),
                                                 ],
                                               ))
                                           : OutlinedButton(
                                               style: buttonStyle(),
                                               onPressed: () async {
-                                                context.read<ListBloc>().add(
+                                                await GFToast.showToast(
+                                                    toastPosition:
+                                                        GFToastPosition.BOTTOM,
+                                                    'Applying Changes...',
+                                                    context);
+                                                context.read<StatusBloc>().add(
                                                     AddToLikedEvent(
                                                         postId: widget
-                                                            .details['id']));
+                                                            .details['id'],
+                                                        isBookmarked: state
+                                                            .isBookmarked!));
                                               },
                                               child: const Row(
                                                 children: [
                                                   Icon(CupertinoIcons.heart),
                                                   SizedBox(width: 20),
-                                                  Text('ADD TO LIKED'),
+                                                  Text('LIKE'),
                                                 ],
                                               )),
                                     ),
@@ -233,32 +241,46 @@ class _DetailsPageState extends State<DetailsPage> {
                                           ? ElevatedButton(
                                               style: buttonStyle(),
                                               onPressed: () async {
-                                                context.read<ListBloc>().add(
+                                                await GFToast.showToast(
+                                                    toastPosition:
+                                                        GFToastPosition.BOTTOM,
+                                                    'Applying Changes...',
+                                                    context);
+                                                context.read<StatusBloc>().add(
                                                     RemoveFromBookmarkEvent(
                                                         postId: widget
-                                                            .details['id']));
+                                                            .details['id'],
+                                                        isLiked:
+                                                            state.isLiked!));
                                               },
                                               child: const Row(
                                                 children: [
                                                   Icon(CupertinoIcons
                                                       .bookmark_fill),
-                                                  SizedBox(width: 20),
-                                                  Text('ADD TO BOOKMARKS'),
+                                                  SizedBox(width: 10),
+                                                  Text('BOOKMARKED'),
                                                 ],
                                               ))
                                           : OutlinedButton(
                                               style: buttonStyle(),
                                               onPressed: () async {
-                                                context.read<ListBloc>().add(
+                                                await GFToast.showToast(
+                                                    toastPosition:
+                                                        GFToastPosition.BOTTOM,
+                                                    'Applying Changes...',
+                                                    context);
+                                                context.read<StatusBloc>().add(
                                                     AddToBookmarkEvent(
                                                         postId: widget
-                                                            .details['id']));
+                                                            .details['id'],
+                                                        isLiked:
+                                                            state.isLiked!));
                                               },
                                               child: const Row(
                                                 children: [
                                                   Icon(CupertinoIcons.bookmark),
                                                   SizedBox(width: 20),
-                                                  Text('ADD TO BOOKMARKS'),
+                                                  Text('BOOKMARK'),
                                                 ],
                                               )),
                                     ),

@@ -77,3 +77,7 @@ ButtonStyle buttonStyle() {
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(90)),
   );
 }
+
+TextStyle spacing() {
+  return const TextStyle(letterSpacing: 2.5, wordSpacing: 1.5);
+}

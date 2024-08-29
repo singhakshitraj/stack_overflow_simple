@@ -1,20 +1,20 @@
 import 'package:equatable/equatable.dart';
 import 'package:social_media/constants/enums.dart';
 
-class ListState extends Equatable {
+class StatusState extends Equatable {
   final bool? isLiked;
   final bool? isBookmarked;
   final num? count;
   final TileStatus tileStatus;
-  const ListState(
+  const StatusState(
       {this.isBookmarked = false,
       this.isLiked = false,
       this.count = 0,
       this.tileStatus = TileStatus.notInitiated});
 
-  ListState copyWith(
+  StatusState copyWith(
       bool? isLiked, bool? isBookmarked, num? count, TileStatus? tileStatus) {
-    return ListState(
+    return StatusState(
         isBookmarked: isBookmarked ?? this.isBookmarked,
         isLiked: isLiked ?? this.isLiked,
         count: count ?? this.count,

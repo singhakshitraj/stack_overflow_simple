@@ -5,7 +5,7 @@ class UserServices {
   Future<String> getListStorageId() async {
     final id = await FirebaseFirestore.instance
         .collection('users')
-        .add({'liked': [], 'bookmarked': []}).then((x) => x.id);
+        .add({'liked': [], 'bookmarked': [], 'myPosts': []}).then((x) => x.id);
     return id;
   }
 
@@ -83,5 +83,22 @@ class UserServices {
         .collection('users')
         .doc(userId)
         .set({'bookmarked': bookmarked}, SetOptions(merge: true));
+  }
+
+  Future<void> addToUserPosts(String userId, String postId) async {
+    dynamic myPosts = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .get()
+        .then((value) => value.data()?['myPosts']);
+    if (myPosts == null) {
+      myPosts = [postId];
+    } else {
+      myPosts.add(postId);
+    }
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .set({'myPosts': myPosts}, SetOptions(merge: true));
   }
 }

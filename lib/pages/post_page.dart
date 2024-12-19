@@ -30,7 +30,7 @@ class _PostPageState extends State<PostPage> {
       body: SingleChildScrollView(
         child: Center(
           child: SizedBox(
-            width: min(500, MediaQuery.of(context).size.width),
+            width: min(500, MediaQuery.of(context).size.width - 30),
             child: Padding(
               padding: const EdgeInsets.only(left: 10, right: 5),
               child: Align(
@@ -140,7 +140,8 @@ class _PostPageState extends State<PostPage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
+        label: const Text('POST'),
         onPressed: () {
           context.read<PostBloc>().add(AddToPostEvent(
                   post: PostFormat().toPost({
@@ -150,7 +151,7 @@ class _PostPageState extends State<PostPage> {
               })));
           Navigator.of(context).pop();
         },
-        child: const Icon(Icons.chevron_right_sharp),
+        icon: const Icon(Icons.chevron_right_sharp),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );

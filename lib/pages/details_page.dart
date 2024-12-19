@@ -303,7 +303,7 @@ class _DetailsPageState extends State<DetailsPage> {
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
                             return Card(
-                              elevation: 0,
+                              elevation: 10,
                               margin: const EdgeInsets.only(
                                   left: 10, right: 10, top: 3),
                               child: ListTile(
@@ -312,7 +312,8 @@ class _DetailsPageState extends State<DetailsPage> {
                                 ),
                                 leading: Padding(
                                   padding: const EdgeInsets.all(2),
-                                  child: Image.asset('lib/assets/guest.png'),
+                                  child: Image.asset('lib/assets/guest.png',
+                                      height: 50),
                                 ),
                                 title: Text(
                                   state.data['comments'][index]['madeBy']
@@ -370,6 +371,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               };
                               context.read<DetailsBloc>().add(AddCommentEvent(
                                   comment: comment, id: widget.details['id']));
+
                               setState(() {
                                 Navigator.of(context).pop();
                               });

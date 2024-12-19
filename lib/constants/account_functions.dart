@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:social_media/constants/push_buttons.dart';
+import 'package:social_media/pages/account_page.dart';
 
 import '../bloc/login_bloc/login_bloc.dart';
 import '../bloc/login_bloc/login_event.dart';
@@ -12,7 +13,10 @@ import '../pages/lists/list_page.dart';
 import '../pages/post_page.dart';
 
 Widget accountFunctions(BuildContext context) {
-  return Wrap(
+  return GridView.count(
+    physics: const BouncingScrollPhysics(parent: BouncingScrollPhysics()),
+    crossAxisCount: 3,
+    shrinkWrap: true,
     children: [
       PushButton().displayButton(
           'lib/assets/raise_complaint.png',
@@ -27,9 +31,10 @@ Widget accountFunctions(BuildContext context) {
               type: PageTransitionType.rightToLeft))),
       PushButton().displayButton(
           'lib/assets/settings.png',
-          'Settings',
+          'My Account',
           () => Navigator.of(context).push(PageTransition(
-              child: const PostPage(), type: PageTransitionType.rightToLeft))),
+              child: const AccountPage(),
+              type: PageTransitionType.rightToLeft))),
       PushButton().displayButton(
           'lib/assets/liked.png',
           'Liked Posts',

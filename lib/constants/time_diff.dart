@@ -7,8 +7,10 @@ class DateTimeDifference {
       return 'Posted ${after.difference(previous).inMinutes} Minutes Ago';
     } else if (after.difference(previous).inHours < 24) {
       return 'Posted ${after.difference(previous).inHours} Hours Ago';
-    } else {
+    } else if (after.difference(previous).inDays < 30) {
       return 'Posted ${after.difference(previous).inDays} Days Ago';
+    } else {
+      return 'Posted ${(after.difference(previous).inDays / 30).floor()} Months Ago';
     }
   }
 }

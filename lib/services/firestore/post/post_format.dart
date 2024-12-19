@@ -19,12 +19,11 @@ class PostFormat {
 
   Map<String, dynamic> toComment(Map<String, dynamic> toComment) {
     Map<String, dynamic> comment = {};
-    comment['madeBy'] = (AuthServices().currentUser?.displayName == null)
-        ? 'guest'
-        : AuthServices().currentUser?.displayName;
+    comment['madeBy'] = AuthServices().username.toString();
     comment['madeAt'] = DateTime.now().toString();
     comment['content'] = toComment['content'];
     comment['replies'] = <Map<String, dynamic>>[];
+    print(comment['madeBy']);
     return comment;
   }
 }
